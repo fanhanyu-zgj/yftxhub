@@ -2,7 +2,6 @@
 package auth
 
 import (
-	"fmt"
 	"net/http"
 	v1 "yftxhub/app/http/controllers/api/v1"
 	"yftxhub/app/models/user"
@@ -20,21 +19,7 @@ type SignupController struct {
 func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 	// 请求对象
 	request := requests.SignupPhoneExistRequest{}
-	// 解析 JSON 请求
-	if err := c.ShouldBindJSON(&request); err != nil {
-		// 解析失败，返回 402 状态码和错误信息
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
-		// 打印错误信息
-		fmt.Println(err.Error())
-		// 出错了，中断请求
-		return
-	}
-	// 表单验证
-	errs := requests.ValidateSignupPhoneExist(&request, c)
-
-	if len(errs) > 0 {
-		// 验证失败，返回 422状态码和错误信息
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"errors": errs})
+	if ok := requests.Validate(c, &request, requests.ValidateSignupPhoneExist); !ok {
 		return
 	}
 	// 检查数据库并返回响应
@@ -44,19 +29,7 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 func (sc *SignupController) IsEmailExist(c *gin.Context) {
 	// 请求对象
 	request := requests.SignupEmailExistRequest{}
-	// 解析 JSON 请求
-	if err := c.ShouldBindJSON(&request); err != nil {
-		// 解析失败，返回 402 状态码和错误信息
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
-		// 打印错误信息
-		fmt.Println(err.Error())
-		// 出错了，中断请求
-		return
-	}
-	errs := requests.ValidateSignupEmailExist(&request, c)
-
-	if len(errs) > 0 {
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"errors": errs})
+	if ok := requests.Validate(c, &request, requests.ValidateSignupEmailExist); !ok {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"exist": user.IsEmailExist(request.Email)})
