@@ -5,6 +5,7 @@ import (
 	"sync"
 	"yftxhub/pkg/app"
 	"yftxhub/pkg/config"
+	"yftxhub/pkg/logger"
 	"yftxhub/pkg/redis"
 
 	"github.com/mojocn/base64Captcha"
@@ -35,7 +36,7 @@ func NewCaptcha() *Captcha {
 		// 配置 base64Captcha 驱动信息
 		driver := base64Captcha.NewDriverDigit(
 			config.GetInt("captcha.height"),      // 宽
-			config.GetInt("captcha.with"),        // 高
+			config.GetInt("captcha.width"),       // 高
 			config.GetInt("captcha.length"),      // 长度
 			config.GetFloat64("captcha.maxskew"), // 数字的最多倾斜角度
 			config.GetInt("captcha.dotcount"),    // 图片背景里的混淆点数
@@ -48,7 +49,8 @@ func NewCaptcha() *Captcha {
 }
 
 // GenerateCaptcha 生成图片验证码
-func (c *Captcha) GenerateCaptcha() (id string, b64s string, answer string, err error) {
+func (c *Captcha) GenerateCaptcha() (id string, b64s string, err error) {
+	logger.InfoString("testst", "1", "2")
 	return c.Base64Captcha.Generate()
 }
 
