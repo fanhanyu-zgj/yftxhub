@@ -21,10 +21,11 @@ func SetupRoute(router *gin.Engine) {
 }
 
 func registerGlobalMiddleware(router *gin.Engine) {
-	router.Use(
+	router.Use(gin.Recovery(),
 		//gin.Logger(),
+		//gin.Recovery(),
 		middlewares.Logger(),
-		gin.Recovery(),
+		middlewares.Recovery(),
 	)
 }
 
