@@ -2,10 +2,10 @@
 package auth
 
 import (
-	"net/http"
 	v1 "yftxhub/app/http/controllers/api/v1"
 	"yftxhub/app/models/user"
 	"yftxhub/app/requests"
+	"yftxhub/pkg/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +23,7 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 		return
 	}
 	// 检查数据库并返回响应
-	c.JSON(http.StatusOK, gin.H{"exist": user.IsPhoneExist(request.Phone)})
+	response.JSON(c, gin.H{"exist": user.IsPhoneExist(request.Phone)})
 }
 
 func (sc *SignupController) IsEmailExist(c *gin.Context) {
@@ -32,5 +32,5 @@ func (sc *SignupController) IsEmailExist(c *gin.Context) {
 	if ok := requests.Validate(c, &request, requests.ValidateSignupEmailExist); !ok {
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"exist": user.IsEmailExist(request.Email)})
+	response.JSON(c, gin.H{"exist": user.IsEmailExist(request.Email)})
 }
