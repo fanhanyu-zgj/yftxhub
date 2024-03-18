@@ -5,6 +5,7 @@ import (
 	v1 "yftxhub/app/http/controllers/api/v1"
 	"yftxhub/app/models/user"
 	"yftxhub/app/requests"
+	"yftxhub/pkg/jwt"
 	"yftxhub/pkg/response"
 
 	"github.com/gin-gonic/gin"
@@ -43,15 +44,17 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 		return
 	}
 	// 2. 验证成功，创建数据
-	_user := user.User{
+	userModel := user.User{
 		Name:     request.Name,
 		Phone:    request.Phone,
 		Password: request.Password,
 	}
-	_user.Create()
-	if _user.ID > 0 {
+	userModel.Create()
+	if userModel.ID > 0 {
+		token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.Name)
 		response.CreatedJSON(c, gin.H{
-			"data": _user,
+			"data":  userModel,
+			"token": token,
 		})
 	} else {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
@@ -66,15 +69,18 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 		return
 	}
 	// 2. 验证成功，创建数据
-	_user := user.User{
+	userModel := user.User{
 		Name:     request.Name,
 		Email:    request.Email,
 		Password: request.Password,
 	}
-	_user.Create()
-	if _user.ID > 0 {
+	userModel.Create()
+	if userModel.ID > 0 {
+		token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.Name)
+
 		response.CreatedJSON(c, gin.H{
-			"data": _user,
+			"data":  userModel,
+			"token": token,
 		})
 	} else {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
