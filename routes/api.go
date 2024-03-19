@@ -31,6 +31,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			authGroup.POST("/verify-codes/email", vcc.SendUsingEmail)
 			lgc := new(auth.LoginController)
 			authGroup.POST("/login/using-phone", lgc.LoginByPhone)
+			authGroup.POST("/login/using-password", lgc.LoginByPassword)
 		}
 		// 注册一个路由
 		v1.GET("/", func(c *gin.Context) {
