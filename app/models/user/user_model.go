@@ -24,7 +24,7 @@ func (userModel *User) Create() {
 	database.DB.Create(&userModel)
 }
 
-// ComparPassword 密码是否正确
-func (userModel *User) ComparPassword(_password string) bool {
+// ComparePassword 密码是否正确
+func (userModel *User) ComparePassword(_password string) bool {
 	return hash.BcryptCheck(_password, userModel.Password)
 }
