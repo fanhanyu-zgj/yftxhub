@@ -4,6 +4,9 @@ package auth
 import (
 	"errors"
 	"yftxhub/app/models/user"
+	"yftxhub/pkg/logger"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Attempt 尝试登录
@@ -25,4 +28,19 @@ func LoginByPhone(phone string) (user.User, error) {
 	}
 
 	return userModel, nil
+}
+
+// CurrentUser 从 gin.Context 中获取当前登录用户
+func CurrentUser(c *gin.Context) user.User {
+	userModel, ok := c.MustGet("current_user").(user.User)
+	if !ok {
+		logger.LogIf(errors.New("无法获取用户"))
+		return user.User{}
+	}
+	return userModel
+}
+
+// CurrentUID 从 gin.Context 中获取当前登录用户 ID
+func CurrentUID(c *gin.Context) string {
+	return c.GetString("current_user_id")
 }
