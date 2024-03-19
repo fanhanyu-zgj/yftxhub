@@ -31,3 +31,22 @@ func (ps *PasswordController) ResetByPhone(c *gin.Context) {
 	}
 
 }
+
+func (ps *PasswordController) ResetByEmail(c *gin.Context) {
+	// 1.验证表单
+	request := requests.ResetByEmailRequest{}
+	if ok := requests.Validate(c, &request, requests.ResetByEmail); !ok {
+		return
+	}
+
+	// 2. 更新密码
+	userModel := user.GetByEmail(request.Email)
+	if userModel.ID == 0 {
+		response.Abort404(c)
+	} else {
+		userModel.Password = request.Password
+		userModel.Save()
+		response.Success(c)
+	}
+
+}
