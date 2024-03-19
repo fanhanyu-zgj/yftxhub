@@ -7,7 +7,7 @@ import (
 	"time"
 	"yftxhub/pkg/logger"
 
-	"github.com/go-redis/redis/v8"
+	redis "github.com/redis/go-redis/v9"
 )
 
 // RedisClient Redis 服务
