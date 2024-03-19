@@ -30,5 +30,7 @@ func AuthJWT() gin.HandlerFunc {
 		c.Set("current_user_id", userModel.GetStringID())
 		c.Set("current_user_name", userModel.Name)
 		c.Set("current_user", userModel)
+
+		c.Next()
 	}
 }
