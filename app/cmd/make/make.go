@@ -70,6 +70,7 @@ func init() {
 	CmdMake.AddCommand(
 		CmdMakeCMD,
 		CmdMakeModel,
+		CmdMakeApiController,
 	)
 }
 
@@ -118,7 +119,7 @@ func createFileFromStub(filePath string, stubName string, model Model, variables
 	for search, replace := range replaces {
 		modelStub = strings.ReplaceAll(modelStub, search, replace)
 	}
-
+	fmt.Printf("filePath=", filePath)
 	// 存储到目标文件中
 	err = file.Put([]byte(modelStub), filePath)
 	if err != nil {
