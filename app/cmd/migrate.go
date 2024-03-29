@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"yftxhub/pkg/database/migrations"
+	"yftxhub/database/migrations"
 	"yftxhub/pkg/migrate"
 
 	"github.com/spf13/cobra"
