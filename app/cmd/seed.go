@@ -11,11 +11,11 @@ import (
 var CmdDBSeed = &cobra.Command{
 	Use:   "seed",
 	Short: "Insert fake data to the database",
-	Run:   runKSeeders,
+	Run:   runSeeders,
 	Args:  cobra.MaximumNArgs(1), // 只允许 1 个参数
 }
 
-func runKSeeders(cmd *cobra.Command, args []string) {
+func runSeeders(cmd *cobra.Command, args []string) {
 	seeders.Initialize()
 	if len(args) > 0 {
 		// 有传参数的情况
