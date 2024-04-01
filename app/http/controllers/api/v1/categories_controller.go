@@ -66,3 +66,18 @@ func (ctrl *CategoriesController) Update(c *gin.Context) {
 		response.Abort500(c)
 	}
 }
+
+func (ctrl *CategoriesController) Delete(c *gin.Context) {
+	categoryModel := category.Get(c.Param("id"))
+	if categoryModel.ID == 0 {
+		response.Abort404(c)
+		return
+	}
+
+	rowsAaffected := categoryModel.Delete()
+	if rowsAaffected > 0 {
+		response.Success(c)
+		return
+	}
+	response.Abort500(c, "删除失败，请稍后尝试~")
+}
