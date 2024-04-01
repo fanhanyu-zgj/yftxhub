@@ -111,6 +111,30 @@ func (migrator *Migrator) rollbackMigrations(migrations []Migration) bool {
 	return runed
 }
 
+// Rollback 回滚所有迁移文件
+func (migrator *Migrator) Reset() {
+
+	migrations := []Migration{}
+	// 按照倒序读取所有文件
+	migrator.DB.Order("id DESC").Find(&migrations)
+
+	// 回滚所有迁移
+	if !migrator.rollbackMigrations(migrations) {
+		console.Success("[migrations] table is empty, nothing to rollback.")
+	}
+
+}
+
+// Refresh 回滚所有迁移,并运行所有迁移
+func (migrator *Migrator) Refresh() {
+
+	// 回滚所有迁移
+	migrator.Rollback()
+	// 再次执行所有迁移
+	migrator.Up()
+
+}
+
 // 获取当前这个批次的值
 func (migrator *Migrator) getBatch() int {
 	// 默认为 1
