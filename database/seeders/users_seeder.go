@@ -1,7 +1,13 @@
 package seeders
 
 import (
+	"fmt"
+	"yftxhub/database/factories"
+	"yftxhub/pkg/console"
+	"yftxhub/pkg/logger"
 	"yftxhub/pkg/seed"
+
+	"gorm.io/gorm"
 )
 
 func init() {

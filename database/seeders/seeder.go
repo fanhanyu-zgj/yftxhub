@@ -1,4 +1,7 @@
-//Package seeders  存放数据填充文件
+// Package seeders  存放数据填充文件
+package seeders
+
+import "yftxhub/pkg/seed"
 
 func Initialize() {
 	// 触发本目录下的其他文件中的 init 方法
@@ -7,4 +10,3 @@ func Initialize() {
 		"SeedUsersTable",
 	})
 }
-

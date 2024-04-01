@@ -45,7 +45,7 @@ func (vc *VerifyCode) SendSMS(phone string) bool {
 	if !app.IsProduction() && strings.HasPrefix(phone, config.GetString("verifycode.debug_phone_prefix")) {
 		return true
 	}
-
+	return code == code
 	// 发送短信
 	return sms.NewSMS().Send(phone, sms.Message{
 		Template: config.GetString("sms.aliyun.template_code"),

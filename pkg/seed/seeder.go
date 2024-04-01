@@ -1,7 +1,12 @@
 // Package seed 处理数据库填充相关逻辑
 package seed
 
-import "gorm.io/gorm"
+import (
+	"yftxhub/pkg/console"
+	"yftxhub/pkg/database"
+
+	"gorm.io/gorm"
+)
 
 // 存放所有 Seeder
 var seeders []Seeder
@@ -30,4 +35,46 @@ func Add(name string, fn SeederFunc) {
 // SetRunOrder 设置[按照顺序执行的 Sseder 数组]
 func SetRunOrder(names []string) {
 	orderedSeederNames = names
+}
+
+// GetSeeder 通过名称来获取 Seeder 对象
+func GetSeeder(name string) Seeder {
+	for _, sdr := range seeders {
+		if name == sdr.Name {
+			return sdr
+		}
+	}
+	return Seeder{}
+}
+
+// RunAll 运行所有 Seeder
+func RunAll() {
+	// 先运行 ordered 的
+	execeuted := make(map[string]string)
+	for _, name := range orderedSeederNames {
+		sdr := GetSeeder(name)
+		if len(sdr.Name) > 0 {
+			console.Warning("Runing Orderded Seeder：" + sdr.Name)
+			sdr.Func(database.DB)
+			execeuted[name] = name
+		}
+	}
+	// 再运行剩下的
+	for _, sdr := range seeders {
+		// 过滤已执行
+		if _, ok := execeuted[sdr.Name]; !ok {
+			console.Warning("Runing Seeder: " + sdr.Name)
+			sdr.Func(database.DB)
+		}
+	}
+}
+
+// RunSeeder 运行单个 Seeder
+func RunSeeder(name string) {
+	for _, sdr := range seeders {
+		if sdr.Name == name {
+			sdr.Func(database.DB)
+			break
+		}
+	}
 }
