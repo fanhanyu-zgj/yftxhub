@@ -3,7 +3,9 @@ package routes
 
 import (
 	"net/http"
+	controllers "yftxhub/app/http/controllers/api/v1"
 	"yftxhub/app/http/controllers/api/v1/auth"
+	"yftxhub/app/http/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -51,5 +53,8 @@ func RegisterAPIRoutes(r *gin.Engine) {
 				"hello": "world",
 			})
 		})
+		uc := new(controllers.UsersController)
+		// 获取当前用户
+		v1.GET("/user", middlewares.AuthJWT(), uc.CurrentUser)
 	}
 }
