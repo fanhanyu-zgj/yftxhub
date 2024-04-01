@@ -2,6 +2,7 @@ package v1
 
 import (
 	"yftxhub/app/models/topic"
+	"yftxhub/app/policies"
 	"yftxhub/app/requests"
 	"yftxhub/pkg/auth"
 	"yftxhub/pkg/response"
@@ -39,6 +40,10 @@ func (ctrl *TopicsController) Update(c *gin.Context) {
 	topicModel := topic.Get(c.Param("id"))
 	if topicModel.ID == 0 {
 		response.Abort404(c)
+		return
+	}
+	if ok := policies.CanModifyTopic(c, topicModel); !ok {
+		response.Abort403(c)
 		return
 	}
 	// 表单验证
