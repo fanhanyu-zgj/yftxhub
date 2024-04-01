@@ -1,6 +1,12 @@
 package user
 
-import "yftxhub/pkg/database"
+import (
+	"yftxhub/pkg/app"
+	"yftxhub/pkg/database"
+	"yftxhub/pkg/paginator"
+
+	"github.com/gin-gonic/gin"
+)
 
 // IsEmailExist 判断 Email 已被注册
 func IsEmailExist(email string) bool {
@@ -32,4 +38,16 @@ func GetByPhone(phone string) (Usermodel User) {
 func GetByEmail(email string) (Usermodel User) {
 	database.DB.Model(User{}).Where("email = ?", email).First(&Usermodel)
 	return
+}
+
+// Pagiate 分页内容
+func Paginate(c *gin.Context, perPage int) (users []User, paging paginator.Paging) {
+	paging = paginator.Paginate(
+		c,
+		database.DB.Model(User{}),
+		&users,
+		app.V1URL(database.TableName(&User{})),
+		perPage,
+	)
+	return users, paging
 }
