@@ -4,7 +4,7 @@ import (
     "yftxhub/pkg/app"
     "yftxhub/pkg/database"
     "yftxhub/pkg/paginator"
-    "yftxhub/pkg/database"
+    "github.com/gin-gonic/gin"
 )
 
 func Get(idstr string) ({{VariableName}} {{StructName}}) {
