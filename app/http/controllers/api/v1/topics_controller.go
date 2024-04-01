@@ -33,3 +33,27 @@ func (ctrl *TopicsController) Store(c *gin.Context) {
 		response.Abort500(c, "创建失败，请稍后尝试~")
 	}
 }
+
+func (ctrl *TopicsController) Update(c *gin.Context) {
+	// 验证 url 参数是否正确
+	topicModel := topic.Get(c.Param("id"))
+	if topicModel.ID == 0 {
+		response.Abort404(c)
+		return
+	}
+	// 表单验证
+	request := requests.TopicRequest{}
+	if ok := requests.Validate(c, &request, requests.TopicSave); !ok {
+		return
+	}
+	// 保存数据
+	topicModel.Title = request.Title
+	topicModel.Body = request.Body
+	topicModel.CategoryID = request.CategoryID
+	rowsAaffected := topicModel.Save()
+	if rowsAaffected > 0 {
+		response.Data(c, topicModel)
+	} else {
+		response.Abort500(c, "更新失败，请重新尝试")
+	}
+}
