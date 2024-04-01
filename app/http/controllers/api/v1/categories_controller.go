@@ -30,3 +30,26 @@ func (ctrl *CategoriesController) Store(c *gin.Context) {
 		response.Abort500(c, "创建失败，请稍后尝试~")
 	}
 }
+
+func (ctrl *CategoriesController) Update(c *gin.Context) {
+	// 验证 url 参数是否正确
+	categoryModel := category.Get(c.Param("id"))
+	if categoryModel.ID == 0 {
+		response.Abort404(c)
+		return
+	}
+	// 表单验证
+	request := requests.CategoryRequest{}
+	if ok := requests.Validate(c, &request, requests.CategorySave); !ok {
+		return
+	}
+	// 保存数据
+	categoryModel.Name = request.Name
+	categoryModel.Description = request.Description
+	rowsAaffected := categoryModel.Save()
+	if rowsAaffected > 0 {
+		response.Data(c, categoryModel)
+	} else {
+		response.Abort500(c)
+	}
+}
