@@ -72,6 +72,7 @@ func main() {
 			bootstrap.SetupRedis()
 
 			// 初始化 缓存
+			bootstrap.SetupCache()
 		},
 	}
 
