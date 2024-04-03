@@ -30,7 +30,7 @@ func (ctrl *UsersController) Index(c *gin.Context) {
 	})
 }
 
-func (ctrl *UsersController) UserUpdateProfile(c *gin.Context) {
+func (ctrl *UsersController) UpdateProfile(c *gin.Context) {
 	request := requests.UserUpdateRequest{}
 	if ok := requests.Validate(c, &request, requests.UserUpdateProfile); !ok {
 		return
@@ -46,4 +46,23 @@ func (ctrl *UsersController) UserUpdateProfile(c *gin.Context) {
 		response.Abort500(c, "更新失败，请稍后尝试~")
 	}
 
+}
+
+func (ctrl *UsersController) UpdateEmail(c *gin.Context) {
+
+	request := requests.UserUpdateEmailRequest{}
+	if ok := requests.Validate(c, &request, requests.UserUpdateEmail); !ok {
+		return
+	}
+
+	currentUser := auth.CurrentUser(c)
+	currentUser.Email = request.Email
+	rowsAffected := currentUser.Save()
+
+	if rowsAffected > 0 {
+		response.Success(c)
+	} else {
+		// 失败，显示错误提示
+		response.Abort500(c, "更新失败，请稍后尝试~")
+	}
 }
