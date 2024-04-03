@@ -3,7 +3,6 @@ tmp
 gohub
 .DS_Store
 .history
-
 # Golang #
 ######################
 # `go test -c` 生成的二进制文件
