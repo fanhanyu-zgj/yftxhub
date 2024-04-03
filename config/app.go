@@ -2,7 +2,7 @@
 package config
 
 import "yftxhub/pkg/config"
-	
+
 func init() {
 	config.Add("app", func() map[string]interface{} {
 		return map[string]interface{}{
@@ -20,6 +20,9 @@ func init() {
 			"url": config.Env("APP_URL", "http://localhost:3000"),
 			// 设置时区，JWT 里会使用，日志记录也会使用到
 			"timezone": config.Env("TIMEZONE", "Asia/Shanghai"),
+
+			// API 域名，未设置的话所有 API URL 加 api 前缀，如 http://domain.com/api/v1/users
+			"api_domain": config.Env("API_DOMAIN"),
 		}
 	})
 }
