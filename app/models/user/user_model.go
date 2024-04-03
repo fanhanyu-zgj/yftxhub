@@ -11,7 +11,12 @@ import (
 type User struct {
 	models.BaseModel
 
-	Name     string `json:"name,omitepmty"`
+	Name string `json:"name,omitepmty"`
+
+	City         string `json:"city,omitepmty"`
+	Introduction string `json:"introduction,omitepmty"`
+	Avatar       string `json:"avatar,omitepmty"`
+
 	Email    string `json:"-"`
 	Phone    string `json:"-"`
 	Password string `json:"-"`
