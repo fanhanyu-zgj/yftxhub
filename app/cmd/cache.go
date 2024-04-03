@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"fmt"
 	"yftxhub/pkg/cache"
 	"yftxhub/pkg/console"
 
 	"github.com/spf13/cobra"
 )
 
+var cacheKey string
 var CmdCache = &cobra.Command{
 	Use:   "cache",
 	Short: "Cache Management",
@@ -18,11 +20,26 @@ var CmdCacheClear = &cobra.Command{
 	Run:   runcCacheClear,
 }
 
+var CmdCacheForget = &cobra.Command{
+	Use:   "forget",
+	Short: "Delete redis key, example: cache foeget cache-key",
+	Run:   runcCacheForget,
+}
+
 func init() {
-	CmdCache.AddCommand(CmdCacheClear)
+	// 注册 cache 命令的子命令
+	CmdCache.AddCommand(CmdCacheClear, CmdCacheForget)
+	// 设置 cache forget 命令的选项
+	CmdCacheForget.Flags().StringVarP(&cacheKey, "key", "k", "", "KEY of the cache")
+	CmdCacheForget.MarkFlagRequired("key")
 }
 
 func runcCacheClear(cmd *cobra.Command, args []string) {
 	cache.Flush()
 	console.Success("Cache cleared.")
+}
+
+func runcCacheForget(cmd *cobra.Command, args []string) {
+	cache.Forget(cacheKey)
+	console.Success(fmt.Sprintf("Cache key [%s] deleted.", cacheKey))
 }
