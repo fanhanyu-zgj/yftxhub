@@ -15,7 +15,7 @@ func ValidateCaptcha(captchaID, captchaAnswer string, errs map[string][]string) 
 }
 
 // ValidatePasswordComfirm 自定义规则，检查两次密码是否正确
-func ValidatePasswordComfirm(password, password_confirm string, errs map[string][]string) map[string][]string {
+func ValidatePasswordConfirm(password, password_confirm string, errs map[string][]string) map[string][]string {
 	if password != password_confirm {
 		errs["password_confirm"] = append(errs["password_confirm"], "两次输入密码不匹配！")
 	}
